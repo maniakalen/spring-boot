@@ -1,6 +1,7 @@
 package foods.web;
 
 import com.google.gson.Gson;
+import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import foods.components.MongoConnector;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,24 +21,25 @@ public class WebController {
 
     @RequestMapping(value = "/rest/add", method = RequestMethod.POST)
     @ResponseBody
-    public String add(@RequestBody DBObject body)
+    public String add(@RequestBody Object body)
     {
-        connector.addItem(body);
-        return "DONE";
+        DBObject obj = (new Gson()).fromJson(body.toString(), BasicDBObject.class);
+        connector.addItem(obj);
+        return (new Gson()).toJson(obj);
     }
 
     @RequestMapping(value = "/rest/change/{id}", method = RequestMethod.POST)
     @ResponseBody
-    public String change(@PathVariable("id") int id, @RequestBody DBObject body)
+    public String change(@PathVariable("id") int id, @RequestBody Object body)
     {
-        connector.manipulateItem(id, (String)body.get("name"), (int)body.get("category"));
-        return "DONE";
+        DBObject obj = (new Gson()).fromJson(body.toString(), BasicDBObject.class);
+        connector.manipulateItem(id, (String)obj.get("name"), ((Double)obj.get("category")).intValue());
+        return (new Gson()).toJson(obj);
     }
     @RequestMapping(value = "/rest/delete/{id}", method = RequestMethod.DELETE)
     @ResponseBody
-    public String delete(@PathVariable("id") int id)
+    public void delete(@PathVariable("id") int id)
     {
         connector.deleteItem(id);
-        return "DONE";
     }
 }

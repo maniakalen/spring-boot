@@ -33,7 +33,7 @@ public class MongoConnector {
             document.put("id", id);
             collection.update(search, document);
         } catch (MongoException e) {
-
+            e.printStackTrace(System.err);
         }
     }
     public void addItem(DBObject data)
@@ -50,7 +50,7 @@ public class MongoConnector {
         }
     }
 
-    public DBObject getItem(int id)
+    DBObject getItem(int id)
     {
         DBCollection collection = db.getCollection("fruits");
         BasicDBObject document = new BasicDBObject();
