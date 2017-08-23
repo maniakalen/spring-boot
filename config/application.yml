@@ -1,0 +1,6 @@
+mongodb:
+  server: 192.168.83.138
+  db: Fruits
+  collections:
+    items: fruits
+    categories: categories
